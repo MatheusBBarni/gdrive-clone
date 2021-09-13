@@ -4,19 +4,12 @@ Professor: [Erick Wendel](https://www.youtube.com/channel/UCh84012dEUE076wM2CVFN
 
 Seja bem vindo(a) à quinta Semana Javascript Expert. Este é o código inicial para iniciar nossa jornada.
 
-Marque esse projeto com uma estrela 🌟
-
-## Preview
-
-![](./resources/demo.gif)
-
-
 ## Checklist Features
 
 - Web API
     - [x] Deve listar arquivos baixados
-    - [ ] Deve receber stream de arquivos e salvar em disco 
-    - [ ] Deve notificar sobre progresso de armazenamento de arquivos em disco 
+    - [x] Deve receber stream de arquivos e salvar em disco
+    - [x] Deve notificar sobre progresso de armazenamento de arquivos em disco 
     - [ ] Deve permitir upload de arquivos em formato image, video ou audio
     - [ ] Deve atingir 100% de cobertura de código em testes
 

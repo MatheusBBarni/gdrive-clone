@@ -102,8 +102,50 @@ describe('#UploadHanlder test suite', () => {
       expect(onWrite.mock.calls.join()).toEqual(messages.join())
     })
 
-    // TODO: stopped the lesson on 1:37:48
-    test.todo('')
+    test('given message timerDelay as 2secs it should emit only two messages during 2 secods period', async () => {
+      jest.spyOn(ioObject, ioObject.emit.name)
+      const messageTimeDelay = 2000
+      const handler = new UploadHanlder({
+        messageTimeDelay,
+        io: ioObject,
+        socketId: '1'
+      })
+
+      const day = '2021-09-13 06:20'
+
+      const onFirstLastMessageSent = TestUtil.getTimeFromDate(`${day}:00`)
+      const onFirstCanExecute = TestUtil.getTimeFromDate(`${day}:02`)
+
+      const onSecondUpdateLastMessageSent = onFirstCanExecute
+      const onSecondCanExecute = TestUtil.getTimeFromDate(`${day}:03`)
+
+      const onThirdCanExecute = TestUtil.getTimeFromDate(`${day}:04`)
+
+      TestUtil.mockDateNow([
+        onFirstLastMessageSent,
+        onFirstCanExecute,
+        onSecondUpdateLastMessageSent,
+        onSecondCanExecute,
+        onThirdCanExecute
+      ])
+
+      const messages = ["hello", "world", "streams"]
+      const expectedMessageSent = 2
+      const filename = 'filename.png'
+
+      const source = TestUtil.generateReadableStream(messages)
+
+      await pipeline(
+        source,
+        handler.handleFileBuffer(filename)
+      )
+
+      expect(ioObject.emit).toHaveBeenCalledTimes(expectedMessageSent)
+
+      const [firstCallResult, secondCallResult] = ioObject.emit.mock.calls
+      expect(firstCallResult).toEqual([hanlder.ON_UPLOAD_EVENT, { processedAlready: "hello".length, filename }])
+      expect(secondCallResult).toEqual([hanlder.ON_UPLOAD_EVENT, { processedAlready: messages.join('').length, filename }])
+    })
   })
 
   describe('#canExecute', () => {
